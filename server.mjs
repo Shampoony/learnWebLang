@@ -1,6 +1,7 @@
 import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
 const assets=new Map([
+  ...['lessons-extra.js','exam-data.js','exam-ui.js'].map(name=>['/'+name,[name,'text/javascript; charset=utf-8']]),
   ['/', ['index.html','text/html; charset=utf-8']],
   ['/index.html',['index.html','text/html; charset=utf-8']],
   ['/style.css',['style.css','text/css; charset=utf-8']],

@@ -1,3 +1,4 @@
+import {expandedRows} from './lessons-extra.js';
 export const levels=['A1','A2','B1','B2'];
 export const languages={de:{name:'Немецкий',native:'Deutsch',flag:'🇩🇪',city:'Берлин',greeting:'Hallo, Welt!'},sk:{name:'Словацкий',native:'Slovenčina',flag:'🇸🇰',city:'Братислава',greeting:'Ahoj, svet!'}};
 const raw={de:[
@@ -38,3 +39,9 @@ for(const [lang,rows] of Object.entries(extra))rows.forEach((r,i)=>lessons.push(
 lessons.sort((a,b)=>a.lang.localeCompare(b.lang)||levels.indexOf(a.level)-levels.indexOf(b.level));
 
 export function normalizeAnswer(value){return value.normalize("NFC").trim().replace(/\s+/g," ").toLocaleLowerCase();}
+
+for(const [lang,byLevel] of Object.entries(expandedRows))for(const [level,rows] of Object.entries(byLevel))rows.forEach((r,i)=>{
+ const options=[r[3],...r[4].split('|')]; const rotate=(i+levels.indexOf(level))%3; options.push(...options.splice(0,rotate));
+ lessons.push({id:`${lang}-${level}-extended-${i+1}`,lang,level,title:r[0],topic:r[0],description:`${r[0]}: изучи примеры, закрепи правило и используй новые слова в собственной речи.`,words:r[1].split(';').map(pair=>{const [word,translation]=pair.split('|');return{word,translation};}),question:r[2],answer:r[3],options,note:r[5],minutes:10+levels.indexOf(level)*2});
+});
+lessons.sort((a,b)=>a.lang.localeCompare(b.lang)||levels.indexOf(a.level)-levels.indexOf(b.level));
